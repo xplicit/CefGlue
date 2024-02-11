@@ -267,10 +267,9 @@
 
         /// <summary>
         /// Comma delimited ordered list of language codes without any whitespace that
-        /// will be used in the "Accept-Language" HTTP header. May be overridden on a
-        /// per-browser basis using the CefBrowserSettings.accept_language_list value.
-        /// If both values are empty then "en-US,en" will be used. Can be overridden
-        /// for individual CefRequestContext instances via the
+        /// will be used in the "Accept-Language" HTTP request header and
+        /// "navigator.language" JS attribute. Can be overridden for individual
+        /// CefRequestContext instances via the
         /// CefRequestContextSettings.accept_language_list value.
         /// </summary>
         public string AcceptLanguageList { get; set; }
@@ -289,6 +288,21 @@
         public string CookieableSchemesList { get; set; }
 
         public bool CookieableSchemesExcludeDefaults { get; set; }
+
+        /// <summary>
+        /// Specify an ID to enable Chrome policy management via Platform and OS-user
+        /// policies. On Windows, this is a registry key like
+        /// "SOFTWARE\\Policies\\Google\\Chrome". On MacOS, this is a bundle ID like
+        /// "com.google.Chrome". On Linux, this is an absolute directory path like
+        /// "/etc/opt/chrome/policies". Only supported with the Chrome runtime. See
+        /// https://support.google.com/chrome/a/answer/9037717 for details.
+        ///
+        /// Chrome Browser Cloud Management integration, when enabled via the
+        /// "enable-chrome-browser-cloud-management" command-line flag, will also use
+        /// the specified ID. See https://support.google.com/chrome/a/answer/9116814
+        /// for details.
+        /// </summary>
+        public string ChromePolicyId { get; set; }
 
         internal cef_settings_t* ToNative()
         {
@@ -322,6 +336,7 @@
             cef_string_t.Copy(AcceptLanguageList, &ptr->accept_language_list);
             cef_string_t.Copy(CookieableSchemesList, &ptr->cookieable_schemes_list);
             ptr->cookieable_schemes_exclude_defaults = CookieableSchemesExcludeDefaults ? 1 : 0;
+            cef_string_t.Copy(ChromePolicyId, &ptr->chrome_policy_id);
             return ptr;
         }
 
@@ -341,6 +356,7 @@
             libcef.string_clear(&ptr->locales_dir_path);
             libcef.string_clear(&ptr->accept_language_list);
             libcef.string_clear(&ptr->cookieable_schemes_list);
+            libcef.string_clear(&ptr->chrome_policy_id);
         }
 
         internal static void Free(cef_settings_t* ptr)

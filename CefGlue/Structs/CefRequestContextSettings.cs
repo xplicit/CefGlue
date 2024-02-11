@@ -44,11 +44,11 @@
 
         /// <summary>
         /// Comma delimited ordered list of language codes without any whitespace that
-        /// will be used in the "Accept-Language" HTTP header. Can be set globally
-        /// using the CefSettings.accept_language_list value or overridden on a per-
-        /// browser basis using the CefBrowserSettings.accept_language_list value. If
-        /// all values are empty then "en-US,en" will be used. This value will be
-        /// ignored if |cache_path| matches the CefSettings.cache_path value.
+        /// will be used in the "Accept-Language" HTTP request header and
+        /// "navigator.language" JS attribute. Can be set globally using the
+        /// CefSettings.accept_language_list value. If all values are empty then
+        /// "en-US,en" will be used. This value will be ignored if |cache_path|
+        /// matches the CefSettings.cache_path value.
         /// </summary>
         public string AcceptLanguageList { get; set; }
 
